@@ -1,4 +1,4 @@
-# OpenCV detection control
+# OpenCV detection for control of computer functions
 Computer control functions with openCV
 
 ![hand_landmarks](https://user-images.githubusercontent.com/53618125/145676227-20cca5d5-40e9-4b14-a3ea-96f7d305ef33.png)
