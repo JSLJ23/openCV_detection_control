@@ -64,9 +64,9 @@ def main():
         fps = 1 / (current_time - previous_time)
         previous_time = current_time
 
-        cv2.putText(img_2, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+        cv2.putText(img_2, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
-        cv2.imshow("Image", img_2)
+        cv2.imshow("Camera feed", img_2)
         cv2.waitKey(1)
 
 
