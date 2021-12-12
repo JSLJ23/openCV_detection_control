@@ -1,6 +1,8 @@
 import cv2
 import mediapipe as mpi
 import time
+import math
+import numpy as np
 
 
 class handDetector():
@@ -43,6 +45,55 @@ class handDetector():
 
         return lm_list
 
+    @staticmethod
+    def fingers_up(lm_list):
+        if len(lm_list) > 0:
+            if lm_list[8][2] < lm_list[6][2]:
+                pass
+
+    @staticmethod
+    def find_thumb_index_midpoint(lm_list, img):
+        if len(lm_list) > 0:
+            x_thumb, y_thumb = lm_list[4][1:3]
+            x_index_finger, y_index_finger = lm_list[8][1:3]
+
+            cv2.circle(img, (x_thumb, y_thumb), 15, (255, 0, 255), cv2.FILLED)  # Thumb circle
+            cv2.circle(img, (x_index_finger, y_index_finger), 15, (255, 0, 255), cv2.FILLED)  # Index finger circle
+            # Line between two circles of thumb and index finger
+            cv2.line(img, (x_thumb, y_thumb), (x_index_finger, y_index_finger), (255, 0, 255), 3)
+
+            length_of_line = math.hypot(x_index_finger - x_thumb, y_index_finger - y_thumb)
+
+            if length_of_line < 30:
+                cv2.circle(img, (x_index_finger, y_index_finger), 15, (0, 255, 0), cv2.FILLED)
+
+        else:
+            x_index_finger, y_index_finger = None, None
+            length_of_line = None
+
+        return length_of_line, x_index_finger, y_index_finger
+
+    @staticmethod
+    def get_angles(lm_list, fingers):
+
+        angle_degrees = 0
+
+        if len(lm_list) > 0:
+
+            a = np.array(lm_list[fingers[0]][1:])
+            b = np.array(lm_list[fingers[1]][1:])
+            c = np.array(lm_list[fingers[2]][1:])
+
+            ba = a - b
+            bc = c - b
+
+            cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+            angle = np.arccos(cosine_angle)
+
+            angle_degrees = np.degrees(angle)
+
+        return angle_degrees
+
 
 def main():
     previous_time = 0
@@ -57,7 +108,7 @@ def main():
         img_2 = detector.find_hands(img)
         lm_list_2 = detector.find_position(img)
         if len(lm_list_2) != 0:
-            print(lm_list_2[4])
+            print(lm_list_2[4], lm_list_2[8])
 
         # create frames per second (fps) variable
         current_time = time.time()
