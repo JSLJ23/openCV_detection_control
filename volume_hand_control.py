@@ -47,8 +47,7 @@ while True:
         print(length_of_line)
 
         if length_of_line < 50:
-
-
+            cv2.circle(image, (x_center, y_center), 15, (0, 255, 0), cv2.FILLED)
 
     current_time = time.time()
     fps = 1/(current_time - previous_time)
